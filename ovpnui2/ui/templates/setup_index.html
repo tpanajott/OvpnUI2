@@ -1,0 +1,43 @@
+{% load static %}
+
+<html>
+  <head>
+	{% include "head.html" %}
+	<link href="{% static 'css/setup.css' %}" rel="stylesheet">
+  </head>
+<body id="SetupForm">
+	<div class="container">
+		<div class="setup-form">
+		<div class="main-div">
+			<div class="panel">
+			<h2>OpenVPN UI 2</h2>
+			<p>Welcome to the setup process of OpenVPN UI 2.</p>
+			<p>Before you can start using this tool we need to setup a few tings. Please follow the instructions below to setup your tool as needed.</p>
+			{% if password_match_failed %}
+				<p class="text-danger">The passwords didn't match!</p>
+			{% endif %} 
+			</div>
+				<form method="POST" id="setup">
+				{% csrf_token %}
+					<div class="form-group">
+            <label for="username">Admin login</label>
+            <input type="text" class="form-control" name="username" id="username" placeholder="Username" aria-describedby="usernameHelp" required>
+            <small id="usernamHelp" class="form-text text-muted">This is the admin login that will be used later on to logon to this tool.</small>
+					</div>
+					<div class="form-group">
+            <label for="password">Admin password</label>
+						<input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+          </div>
+          <div class="form-group">
+            <label for="passwordRepeat">Repeat admin password</label>
+						<input type="password" class="form-control" name="passwordRepeat" id="passwordRepeat" placeholder="Repeat password" required>
+					</div>
+					<br>
+					<button type="submit" class="btn btn-primary">Next</button>
+				</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{% extends "base_site.html" %}
+
+{% block content %}
+    <div class="ccard">
+        <div class="panel">
+            <h2 class="left">Clients for server '{{ SERVER_NAME }}'</h2>
+            <button onclick="window.location = '{% url 'new_client' SERVER_NAME %}'" class="btn btn-primary-orange right">Create new client</button>
+        </div>
+        <div class="content">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                    <th>Name</th>
+                    <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <th>{{client}}</th>
+                            <th><a href="{% url 'download_client' SERVER_NAME client %}">Download configuration</a></th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,36 @@
+{% extends "base_site.html" %}
+
+{% block content %}
+    <div class="ccard">
+        <div class="panel">
+            <h2 class="left">Currently existing servers</h2>
+            <button onclick="window.location = '{% url 'new_server' %}'" class="btn btn-primary-orange right">Create new server</button>
+        </div>
+        <div class="content">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                    <th>Name</th>
+                    <th>Listening</th>
+                    <th>Running</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for server in servers %}
+                        <tr onclick="window.location = '{% url 'view_server' server.NAME %}'" style="cursor: hand;">
+                            <th>{{server.NAME}}</th>
+                            <th>{{ server.PROTOCOL }} {{server.CONFIG.local}}:{{server.CONFIG.port}}</th>
+                            {% if server.STATUS == 'active' %}
+                                <th><span class="badge badge-success">{{server.STATUS}}</span></th>
+                            {% elif server.STATUS == 'failed' %}
+                                <th><span class="badge badge-danger">{{server.STATUS}}</span></th>
+                            {% elif server.STATUS == 'inactive' %}
+                                <th><span class="badge badge-secondary">{{server.STATUS}}</span></th>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}

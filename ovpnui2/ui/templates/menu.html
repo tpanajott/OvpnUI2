@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <a class="navbar-brand" href="{% url 'home' %}">OpenVPN UI 2</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      {% if request.resolver_match.url_name == 'home' %}
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+        </li>
+      {% else %}
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'home' %}">Home</a>
+        </li>
+      {% endif %}
+      {% if request.resolver_match.url_name == 'servers' %}
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'servers' %}">Servers <span class="sr-only">(current)</span></a>
+        </li>
+      {% else %}
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'servers' %}">Servers</a>
+        </li>
+      {% endif %}
+    </ul>
+    <ul class="navbar-nav my-2 my-lg-0">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</span></a>
+        </li>
+    </ul>
+  </div>
+</nav>

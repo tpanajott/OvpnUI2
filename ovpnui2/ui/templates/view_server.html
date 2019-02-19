@@ -1,0 +1,65 @@
+{% extends "base_site.html" %}
+
+{% block content %}
+    <div class="ccard">
+        <div class="panel">
+            {% if server.STATUS == 'active' %}
+                <h2 class="left">{{ server.NAME }} <span class="badge badge-success">{{server.STATUS}}</span></h2>
+            {% elif server.STATUS == 'failed' %}
+                <h2 class="left">{{ server.NAME }} <span class="badge badge-danger">{{server.STATUS}}</span></h2>
+            {% elif server.STATUS == 'inactive' %}
+                <h2 class="left">{{ server.NAME }} <span class="badge badge-secondary">{{server.STATUS}}</span></h2>
+            {% endif %}
+        </div>
+        <div class="content">
+            <hr>
+            <h4>Connected clients</h4>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                    <th>Name</th>
+                    <th>Virtual IP</th>
+                    <th>Real IP:Port</th>
+                    <th>Bytes Sent/Recived</th>
+                    <th>Connected</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in server.CONNECTED_CLIENTS %}
+                        <tr>
+                            <th>{{client.name}}</th>
+                            <th>{{ client.virtualip }}</th>
+                            <th>{{ client.sourceip }}</th>
+                            <th>{{ client.sent }} / {{ client.recived }}</th>
+                            <th>{{ client.connected }}</th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="ccard">
+            <div class="panel">
+                <h2 class="left">Available clients</h2>
+                <button onclick="window.location = '{% url 'new_client' server.NAME %}'" class="btn btn-primary-orange right"><i class="fas fa-plus-square" style="padding-right: 5px;"></i> Create new client</button>
+            </div>
+            <div class="content">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                        <th>Name</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in server.CLIENTS %}
+                            <tr>
+                                <th>{{client}}</th>
+                                <th><a href="{% url 'download_client' server.NAME client %}" title="Download client configuration"><i class="fas fa-download"></i>                                </a></th>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+{% endblock content %}

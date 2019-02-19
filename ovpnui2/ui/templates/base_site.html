@@ -1,0 +1,15 @@
+{% load static %}
+
+<html>
+<head>
+    {% include "head.html" %}
+</head>
+
+{% include "menu.html" %}
+
+<div class="container" id="main_container">
+{% block content %}
+{% endblock content %}
+</div>
+
+</html>

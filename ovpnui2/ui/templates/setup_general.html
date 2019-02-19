@@ -1,0 +1,131 @@
+{% load static %}
+
+<html>
+  <head>
+	{% include "head.html" %}
+	<link href="{% static 'css/setup.css' %}" rel="stylesheet">
+  </head>
+<body id="SetupForm">
+	<div class="container">
+		<div class="setup-form">
+		<div class="main-div">
+			<div class="panel">
+			<h2>OpenVPN UI 2</h2>
+			<p>Welcome to the setup process of OpenVPN UI 2.</p>
+			</div>
+				<form method="POST" id="setup">
+				{% csrf_token %}
+					<div class="form-group">
+							<div class="alert alert-warning" role="alert">
+									Note that the VORACLE-attach uses the compression. It is therefore recomended to leave compression off.
+							</div>
+							<label for="compression">Use compression?</label>
+							<select class="form-control" id="compression" name="compression" aria-describedby="compressionHelp" required>
+									<option>No</option>
+									<option>Yes</option>
+							</select>
+							<small id="compressionHelp" class="form-text text-muted">Wether or not to use compression during transmission of data.</small>
+					</div>
+					<div class="form-group">
+							<label for="compression_alg">Compression algorithm</label>
+							<select class="form-control" id="compression_alg" name="compression_alg" required>
+									<option>lz4</option>
+									<option>lzo</option>
+							</select>
+					</div>
+					<hr>
+					<div class="alert alert-warning" role="alert">
+							The following paramaters are for encryption.
+							<br>
+							Do not alter if you do not know what you are doing!
+					</div>
+					<div class="form-group">
+							<label for="cipher">Cipher</label>
+							<select class="form-control" id="cipher" name="cipher" required>
+									<option>AES-128-GCM</option>
+									<option>AES-192-GCM</option>
+									<option>AES-256-GCM</option>
+									<option>AES-128-CBC</option>
+									<option>AES-192-CBC</option>
+									<option>AES-256-CBC</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="cert_type">Certificate type</label>
+							<select class="form-control" id="cert_type" name="cert_type" required>
+									<option>ECDSA</option>
+									<option>RSA</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="curve">Curve type</label>
+							<select class="form-control" id="curve" name="curve" required>
+									<option>prime256v1</option>
+									<option>secp384r1</option>
+									<option>secp521r1</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="rsa_size">RSA Size</label>
+							<select class="form-control" id="rsa_size" name="rsa_size" required>
+									<option>2048</option>
+									<option>3072</option>
+									<option>4096</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="control_channel">Control channel cipher</label>
+							<select class="form-control" id="control_channel" name="control_channel" required>
+									<option>TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256</option>
+									<option>TLS-ECDHE-ECDSA-WITH-AES-256-GCM-SHA384</option>
+									<option>-</option>
+									<option>TLS-ECDHE-RSA-WITH-AES-128-GCM-SHA256</option>
+									<option>TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="dh_type">Diffie-Hellman key type</label>
+							<select class="form-control" id="dh_type" name="dh_type" required>
+									<option>ECDH</option>
+									<option>DH</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="ecdh_curve_type">ECDH curve type</label>
+							<select class="form-control" id="ecdh_curve_type" name="ecdh_curve_type" required>
+									<option>prime256v1</option>
+									<option>secp384r1</option>
+									<option>secp521r1</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="digest_alg">Digest algorithm</label>
+							<select class="form-control" id="digest_alg" name="digest_alg" required>
+									<option>SHA256</option>
+									<option>SHA384</option>
+									<option>SHA512</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="tls_sig">TLS method</label>
+							<select class="form-control" id="tls_sig" name="tls_sig" required>
+									<option>tls-crypt</option>
+									<option>tls-auth</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="tls_sig">TLS method</label>
+							<select class="form-control" id="tls_sig" name="tls_sig" required>
+									<option>tls-crypt</option>
+									<option>tls-auth</option>
+							</select>
+					</div>
+					<br>
+					<button type="submit" class="btn btn-primary">Next</button>
+				</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

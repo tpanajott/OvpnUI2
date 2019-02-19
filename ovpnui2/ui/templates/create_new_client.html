@@ -1,0 +1,39 @@
+{% extends "base_site.html" %}
+{% load static %}
+
+{% block content %}
+<link href="{% static 'css/setup.css' %}" rel="stylesheet">
+<body id="SetupForm">
+	<div class="container">
+		<div class="setup-form">
+		<div class="main-div">
+			<div class="panel">
+			<h2>Create new OpenVPN Client</h2>
+			</div>
+				<form method="POST" id="setup">
+                    {% csrf_token %}
+                    <!-- <div class="form-group">
+                        <label for="SERVER_NAME">Select server</label>
+                        <select type="text" class="form-control" name="SERVER_NAME" id="SERVER_NAME" placeholder="Server name" aria-describedby="SERVER_NAME_HELP" required>
+                            {% for server in SERVERS %}
+                                <option>{{ server }}</option>
+                            {% endfor %}
+                        </select>
+                        <small id="SERVER_NAME_HELP" class="form-text text-muted">To which server is this client attached.</small>
+                    </div> -->
+                    <input type="hidden" id="SERVER_NAME" name="SERVER_NAME" value="{{ SERVER_NAME }}" required>
+                    <div class="form-group">
+                        <label for="CLIENT_NAME">Client name</label>
+                        <input type="text" class="form-control" id="CLIENT_NAME" name="CLIENT_NAME" aria-describedby="CLIENT_NAME_HELP" placeholder="Client name" required>
+                        <small id="CLIENT_NAME_HELP" class="form-text text-muted">The name of the client.</small>
+                    </div>
+					<button type="submit" class="btn btn-primary">Next</button>
+				</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+{% endblock content %}

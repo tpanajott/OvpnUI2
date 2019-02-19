@@ -1,0 +1,203 @@
+{% extends "base_site.html" %}
+{% load static %}
+
+{% block content %}
+<link href="{% static 'css/setup.css' %}" rel="stylesheet">
+
+<script>
+function get_set_public_ip() {
+	$.getJSON('http://www.geoplugin.net/json.gp?jsoncallback=?', function(data) {
+		$('#PUBLICIP').val(data.geoplugin_request);
+	});
+}
+</script>
+
+<body id="SetupForm">
+	<div class="container">
+		<div class="setup-form">
+		<div class="main-div">
+			<div class="panel">
+			<h2>Create new OpenVPN server</h2>
+			</div>
+				<form method="POST" id="setup">
+                {% csrf_token %}
+                <p style="padding-left: 15px">General settings</p>
+                <div class="form-group">
+                    <label for="SERVER_NAME">Server name</label>
+                    <input type="text" class="form-control" name="SERVER_NAME" id="SERVER_NAME" placeholder="Server name" aria-describedby="SERVER_NAME_HELP" required>
+                    <small id="SERVER_NAME_HELP" class="form-text text-muted">This is only an internal identifier in this system.</small>
+                </div>
+                <hr>
+                <p style="padding-left: 15px">IP settings</p>
+                    <div class="form-group">
+                        {% if not ISPUBLICIP %}
+                            <div class="alert alert-warning" role="alert">
+                                    WARNING: The IP-address automatically found on this machine is classified as an internal IP address and will not be reachable from outside your network (ie. the internet).
+                                    Manually enter your public IP (if static) or an address to be used to connect to this machine.
+                                    <br>
+									If you do not have a static IP or address to this machine a free service such as no-ip can be used.
+									<br>
+									<span style="cursor: hand; color: #007bff;" onclick="get_set_public_ip()">Get public IP</a>
+                            </div>
+                        {% endif %}
+                        <label for="PUBLICIP">Public address</label>
+						<input type="text" class="form-control" id="PUBLICIP" name="PUBLICIP" aria-describedby="PUBLICIP_HELP" value="{{ PUBLICIP }}" required>
+                        <small id="PUBLICIP_HELP" class="form-text text-muted">This is the IP address the OpenVPN-Server will be reached at.</small>
+                        <div class="form-group">
+                            <label for="PORT">Port</label>
+                            <input type="number" class="form-control" name="PORT" id="PORT" placeholder="Port" aria-describedby="PORT_HELP" value="1194" required>
+                            <small id="PORT_HELP" class="form-text text-muted">This is the IP address or hostname that will be used to connect to this machine from remote hosts.</small>
+                            <div class="alert alert-info" role="alert">
+                                    Note that this port needs to be reachable from the outside of your network.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="PROTOCOL">Carrier protocol</label>
+                            <select class="form-control" id="PROTOCOL" name="PROTOCOL" aria-describedby="PROTOCOL_HELP" required>
+                                <option>UDP</option>
+                                <option>TCP</option>
+                            </select>
+                            <small id="PROTOCOL_HELP" class="form-text text-muted">This is the underlying protocol the OpenVPN will use.</small>
+                            <div class="alert alert-info" role="alert">
+                                    UDP is faster and sould be used if at all possible.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="DNS">DNS Resolver</label>
+                            <select class="form-control" id="DNS" name="DNS" aria-describedby="DNS_HELP" required>
+                                <option>Current system resolvers (from /etc/resolv.conf)</option>
+                                <option>Cloudflare (Anycast: worldwide)</option>
+                                <option>Quad9 (Anycast: worldwide)</option>
+                                <option>Quad9 uncensored (Anycast: worldwide)</option>
+                                <option>FDN (France)</option>
+                                <option>DNS.WATCH (Germany)</option>
+                                <option>OpenDNS (Anycast: worldwide)</option>
+                                <option>Google (Anycast: worldwide)</option>
+                                <option>Yandex Basic (Russia)</option>
+                                <option>AdGuard DNS (Russia)</option>
+                            </select>
+                            <small id="DNS_HELP" class="form-text text-muted">This is the DNS resolver that clients will use.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="SUBNET">Internal network</label>
+                            <input type="text" class="form-control" id="SUBNET" name="SUBNET" aria-describedby="SUBNET_HELP" value="10.1.11.0" required>
+                            <small id="SUBNET_HELP" class="form-text text-muted">Internal network in the tunnel. Exmaple: 10.1.11.0</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="SUBNET_MASK">Internal network</label>
+                            <input type="text" class="form-control" id="SUBNET_MASK" name="SUBNET_MASK" aria-describedby="SUBNET_MASK_HELP" value="255.255.255.0" required>
+                            <small id="SUBNET_MASK_HELP" class="form-text text-muted">Internal subnet mask in the tunnel. Exmaple: 255.255.255.0</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <p style="padding-left: 15px">Compression settings</p>
+					<div class="form-group">
+							<div class="alert alert-warning" role="alert">
+									Note that the VORACLE-attach uses the compression. It is therefore recomended to leave compression off.
+							</div>
+							<label for="COMPRESSION_ENABLED">Use compression?</label>
+							<select class="form-control" id="COMPRESSION_ENABLED" name="COMPRESSION_ENABLED" aria-describedby="COMPRESSION_ENABLED_HELP" required>
+									<option>No</option>
+									<option>Yes</option>
+							</select>
+							<small id="COMPRESSION_ENABLED_HELP" class="form-text text-muted">Wether or not to use compression during transmission of data.</small>
+					</div>
+					<div class="form-group">
+							<label for="COMPRESSION_ALG">Compression algorithm</label>
+							<select class="form-control" id="COMPRESSION_ALG" name="COMPRESSION_ALG" required>
+									<option>lz4</option>
+									<option>lzo</option>
+							</select>
+					</div>
+                    <hr>
+                    <p>Ecnryption settings</p>
+					<div class="alert alert-warning" role="alert">
+							The following paramaters are for encryption.
+							<br>
+							Do not alter if you do not know what you are doing!
+					</div>
+					<div class="form-group">
+							<label for="CIPHER">Cipher</label>
+							<select class="form-control" id="CIPHER" name="CIPHER" required>
+									<option>AES-128-GCM</option>
+									<option>AES-192-GCM</option>
+									<option>AES-256-GCM</option>
+									<option>AES-128-CBC</option>
+									<option>AES-192-CBC</option>
+									<option>AES-256-CBC</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="CERT_TYPE">Certificate type</label>
+							<select class="form-control" id="CERT_TYPE" name="CERT_TYPE" required>
+									<option>ECDSA</option>
+									<option>RSA</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="CERT_CURVE">Curve type</label>
+							<select class="form-control" id="CERT_CURVE" name="CERT_CURVE" required>
+									<option>prime256v1</option>
+									<option>secp384r1</option>
+									<option>secp521r1</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="CC_CIPHER">RSA Size</label>
+							<select class="form-control" id="CC_CIPHER" name="CC_CIPHER" required>
+									<option>2048</option>
+									<option>3072</option>
+									<option>4096</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="CC_CIPHER">Control channel cipher</label>
+							<select class="form-control" id="CC_CIPHER" name="CC_CIPHER" required>
+									<option>TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256</option>
+									<option>TLS-ECDHE-ECDSA-WITH-AES-256-GCM-SHA384</option>
+									<option>-</option>
+									<option>TLS-ECDHE-RSA-WITH-AES-128-GCM-SHA256</option>
+									<option>TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="DH_TYPE">Diffie-Hellman key type</label>
+							<select class="form-control" id="DH_TYPE" name="DH_TYPE" required>
+									<option>ECDH</option>
+									<option>DH</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="DH_CURVE">ECDH curve type</label>
+							<select class="form-control" id="DH_CURVE" name="DH_CURVE" required>
+									<option>prime256v1</option>
+									<option>secp384r1</option>
+									<option>secp521r1</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="HMAC_ALG">Digest algorithm</label>
+							<select class="form-control" id="HMAC_ALG" name="HMAC_ALG" required>
+									<option>SHA256</option>
+									<option>SHA384</option>
+									<option>SHA512</option>
+							</select>
+					</div>
+					<div class="form-group">
+							<label for="TLS_SIG">TLS method</label>
+							<select class="form-control" id="TLS_SIG" name="TLS_SIG" required>
+									<option>tls-crypt</option>
+									<option>tls-auth</option>
+							</select>
+					</div>
+					<br>
+					<button type="submit" class="btn btn-primary">Next</button>
+				</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+{% endblock content %}
