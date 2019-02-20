@@ -78,3 +78,13 @@ def download_client(request, SERVER_NAME, CLIENT):
             response['Content-Disposition'] = 'inline; filename=' + "%s_%s.ovpn" % (SERVER_NAME, CLIENT)
             return response
     return HttpResponseNotFound('<h1>Client configuration not found!</h1>')
+
+@login_required
+def delete(request, SERVER_NAME):
+    print("Deleting server '%s'" % SERVER_NAME)
+    new_server_script = "%s/helpers/delete_server.sh" % os.path.dirname(os.path.realpath(__file__))
+    env = request.POST.copy()
+    env['SERVER_NAME'] = SERVER_NAME
+    p = subprocess.Popen(new_server_script, env=env)
+    p.communicate()
+    return redirect("servers")

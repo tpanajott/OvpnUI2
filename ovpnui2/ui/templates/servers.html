@@ -1,6 +1,55 @@
 {% extends "base_site.html" %}
+{% load static %}
 
 {% block content %}
+<link href="{% static 'css/alert.css' %}" rel="stylesheet">
+<script>
+
+function doConfirm(msg, yesFn, noFn)
+{
+    var confirmBox = $("#confirmBox");
+    // confirmBox.sty
+    confirmBox.find(".message").text(msg);
+    confirmBox.find(".yes,.no").unbind().click(function()
+    {
+        confirmBox.hide();
+    });
+    confirmBox.find(".yes").click(yesFn);
+    confirmBox.find(".no").click(noFn);
+    confirmBox.show();
+}
+
+function deleteServer(name) {
+    var modal = document.getElementById('deleteServerModal');
+    var noDeleteButton = document.getElementById('noDeleteButton');
+    var yesDeleteButton = document.getElementById('yesDeleteButton');
+
+    modal.style.display = "block";
+
+    noDeleteButton.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    yesDeleteButton.onclick = function() {
+        modal.style.display = "none";
+        var delete_url = "{% url 'delete_server' 12345 %}".replace(/12345/, name.toString());
+        window.location = delete_url
+    }
+}
+
+</script>
+<div id="deleteServerModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content" style="width: 40em;">
+        <p>Are you sure you want to delete the server?</p>
+        <div>
+            <button id="noDeleteButton" type="button" style="width: 5em; float: right; margin-right: .5em;" class="btn btn-primary">No</button>
+            <button id="yesDeleteButton" type="button" style="width: 5em; float: right; margin-right: .5em;" class="btn btn-danger">Yes</button>
+        </div>
+    </div>
+
+</div>
     <div class="ccard">
         <div class="panel">
             <h2 class="left">Currently existing servers</h2>
@@ -12,13 +61,14 @@
                     <tr>
                     <th>Name</th>
                     <th>Listening</th>
-                    <th>Running</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for server in servers %}
-                        <tr onclick="window.location = '{% url 'view_server' server.NAME %}'" style="cursor: hand;">
-                            <th>{{server.NAME}}</th>
+                        <tr>
+                            <th onclick="window.location = '{% url 'view_server' server.NAME %}'" style="cursor: hand;">{{server.NAME}}</th>
                             <th>{{ server.PROTOCOL }} {{server.CONFIG.local}}:{{server.CONFIG.port}}</th>
                             {% if server.STATUS == 'active' %}
                                 <th><span class="badge badge-success">{{server.STATUS}}</span></th>
@@ -27,6 +77,14 @@
                             {% elif server.STATUS == 'inactive' %}
                                 <th><span class="badge badge-secondary">{{server.STATUS}}</span></th>
                             {% endif %}
+                            <th>
+                                <i class="fa fa-trash" onclick="deleteServer('{{ server.NAME }}');" title="Delete server" style="padding-right: 5px;"></i>
+                                {% if server.STATUS == 'active' %}
+                                    <i class="fa fa-toggle-on" title="Turn server off"></i>
+                                {% else %}
+                                    <i class="fa fa-toggle-off" onclick="alert('test');" title="Turn server on"></i>
+                                {% endif %}
+                            </th>
                         </tr>
                     {% endfor %}
                 </tbody>
