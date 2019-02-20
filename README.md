@@ -3,6 +3,8 @@
   - [Download and setup](#download-and-setup)
     - [Locking down allowed hosts](#locking-down-allowed-hosts)
     - [Installing base software](#installing-base-software)
+    - [Helpers permissions](#helpers-permissions)
+    - [Install python modules](#install-python-modules)
 - [Goals](#goals)
 
 # How to setup
@@ -30,6 +32,12 @@ If that script does not work, make sure you install appropriate packages for the
 * wget
 * ca-certificates
 * curl
+  
+### Helpers permissions
+Make sure all the scripts in `ovpnui2/ui/helpers/` have (at least) permissions to be executable as root user
+
+### Install python modules
+In order for this application to work it needs to have Django install via pip for Python 3. This is easiest done by running the command `pip3 install django`. This application is writting using Django 2.1.7 and python 3.6 but might work with older/newer releases.
 
 To become root, run `su` or `sudo su`. Then start the application be running the following commands
 ```
