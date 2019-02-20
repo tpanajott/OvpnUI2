@@ -32,34 +32,10 @@ def index_view(request):
     return render(request, 'index.html')
 
 @login_required
-def new_ca_view(request):
-    if request.method == "GET":
-        return render(request, 'new_ca.html', context={
-            'countries': enums.COUNTRY_CHOICES
-        })
-    elif request.method == "POST":
-        # backend.create_new_ca(values=request.POST)
-
-        return render(request, 'new_ca.html', context={
-            'countries': enums.COUNTRY_CHOICES
-        })
-
-@login_required
-def cas_view(request):
-    return render(request, 'cas.html', context={
-        'cas': backend.get_cas()
-    })
-
-@login_required
-def new_server_view(request):
-    return render(request, 'cas.html', context={
-        'cas': backend.get_cas()
-    })
-
-@login_required
 def servers_view(request):
     servers = server_manager.get_servers()
     return render(request, 'servers.html', context={
+        'title': 'Servers',
         'servers': servers
     })
 
@@ -67,5 +43,6 @@ def servers_view(request):
 def server_view(request, SERVER_NAME):
     servers = server_manager.get_servers_named()
     return render(request, 'view_server.html', context={
+        'title': SERVER_NAME,
         'server': servers[SERVER_NAME]
     })
