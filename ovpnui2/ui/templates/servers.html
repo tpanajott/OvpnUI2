@@ -72,17 +72,19 @@ function deleteServer(name) {
                             <th>{{ server.PROTOCOL }} {{server.CONFIG.local}}:{{server.CONFIG.port}}</th>
                             {% if server.STATUS == 'active' %}
                                 <th><span class="badge badge-success">{{server.STATUS}}</span></th>
+                            {% elif server.STATUS == 'unknown' %}
+                                <th><span class="badge badge-info">stopped</span></th>
                             {% elif server.STATUS == 'failed' %}
                                 <th><span class="badge badge-danger">{{server.STATUS}}</span></th>
-                            {% elif server.STATUS == 'inactive' %}
+                            {% else %}
                                 <th><span class="badge badge-secondary">{{server.STATUS}}</span></th>
                             {% endif %}
                             <th>
-                                <i class="fa fa-trash" onclick="deleteServer('{{ server.NAME }}');" title="Delete server" style="padding-right: 5px;"></i>
+                                <i class="fa fa-trash" style="cursor: hand; padding-right: 5px;" onclick="deleteServer('{{ server.NAME }}');" title="Delete server"></i>
                                 {% if server.STATUS == 'active' %}
-                                    <i class="fa fa-toggle-on" title="Turn server off"></i>
+                                    <i class="fa fa-toggle-on" onclick="window.location = '{% url 'stop_server' server.NAME %}'" style="cursor: hand;" title="Turn server off"></i>
                                 {% else %}
-                                    <i class="fa fa-toggle-off" onclick="alert('test');" title="Turn server on"></i>
+                                    <i class="fa fa-toggle-off" onclick="window.location = '{% url 'start_server' server.NAME %}'" style="cursor: hand;" onclick="alert('test');" title="Turn server on"></i>
                                 {% endif %}
                             </th>
                         </tr>

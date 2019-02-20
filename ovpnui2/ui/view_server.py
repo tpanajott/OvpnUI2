@@ -88,3 +88,25 @@ def delete(request, SERVER_NAME):
     p = subprocess.Popen(new_server_script, env=env)
     p.communicate()
     return redirect("servers")
+
+
+@login_required
+def stop(request, SERVER_NAME):
+    print("Deleting server '%s'" % SERVER_NAME)
+    new_server_script = "%s/helpers/stop_disable_server.sh" % os.path.dirname(os.path.realpath(__file__))
+    env = request.POST.copy()
+    env['SERVER_NAME'] = SERVER_NAME
+    p = subprocess.Popen(new_server_script, env=env)
+    p.communicate()
+    return redirect("servers")
+
+
+@login_required
+def start(request, SERVER_NAME):
+    print("Deleting server '%s'" % SERVER_NAME)
+    new_server_script = "%s/helpers/start_enable_server.sh" % os.path.dirname(os.path.realpath(__file__))
+    env = request.POST.copy()
+    env['SERVER_NAME'] = SERVER_NAME
+    p = subprocess.Popen(new_server_script, env=env)
+    p.communicate()
+    return redirect("servers")

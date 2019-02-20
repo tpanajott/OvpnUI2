@@ -16,6 +16,8 @@ urlpatterns = [
     path('servers/<str:SERVER_NAME>/clients/download/<str:CLIENT>', view_server.download_client, name='download_client'),
     path('servers/<str:SERVER_NAME>/new_client', view_server.new_client, name='new_client'),
     path('servers/<str:SERVER_NAME>/delete', view_server.delete, name='delete_server'),
+    path('servers/<str:SERVER_NAME>/start', view_server.start, name='start_server'),
+    path('servers/<str:SERVER_NAME>/stop', view_server.stop, name='stop_server'),
     path('new_server', view_server.new, name='new_server'),
     path('setup/index', setup.index, name='setup_index'),
 ]
