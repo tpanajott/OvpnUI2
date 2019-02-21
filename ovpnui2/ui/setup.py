@@ -7,9 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from . import utils
-from . import enums
-from . import backend
-
 
 def index(request):
     if request.method == "GET":

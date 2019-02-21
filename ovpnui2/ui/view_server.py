@@ -15,8 +15,6 @@ import os
 
 
 from . import utils
-from . import enums
-from . import backend
 
 @login_required
 def new(request):

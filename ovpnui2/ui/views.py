@@ -8,9 +8,6 @@ from django.contrib.auth.decorators import login_required
 import os
 from . import server_manager
 
-from . import enums
-from . import backend
-
 def login_view(request):
     if request.method == "GET":
         return render(request, "login.html")
