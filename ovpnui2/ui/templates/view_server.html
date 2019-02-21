@@ -1,6 +1,40 @@
 {% extends "base_site.html" %}
+{% load static %}
 
 {% block content %}
+<link href="{% static 'css/alert.css' %}" rel="stylesheet">
+<script>
+
+function deleteClient(server, client) {
+    var modal = document.getElementById('deleteServerModal');
+    var noDeleteButton = document.getElementById('noDeleteButton');
+    var yesDeleteButton = document.getElementById('yesDeleteButton');
+
+    modal.style.display = "block";
+
+    noDeleteButton.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    yesDeleteButton.onclick = function() {
+        modal.style.display = "none";
+        var delete_url = "{% url 'delete_client' 123 456 %}".replace(/123/, server.toString()).replace(/456/, client.toString());
+        window.location = delete_url
+    }
+}
+
+</script>
+    <div id="deleteServerModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content" style="width: 40em;">
+            <p>Are you sure you want to delete this client?</p>
+            <p>If the client is already connected it will not be disconnected!</p>
+            <div>
+                <button id="noDeleteButton" type="button" style="width: 5em; float: right; margin-right: .5em;" class="btn btn-primary">No</button>
+                <button id="yesDeleteButton" type="button" style="width: 5em; float: right; margin-right: .5em;" class="btn btn-danger">Yes</button>
+            </div>
+        </div>
+    </div>
     <div class="ccard">
         <div class="panel">
             {% if server.STATUS == 'active' %}
@@ -55,7 +89,10 @@
                         {% for client in server.CLIENTS %}
                             <tr>
                                 <th>{{client}}</th>
-                                <th><a href="{% url 'download_client' server.NAME client %}" title="Download client configuration"><i class="fas fa-download"></i>                                </a></th>
+                                <th>
+                                    <i style="cursor: hand; margin-right: 5px;" onclick="window.location = '{% url 'download_client' server.NAME client %}'" title="Download client configuration" class="fas fa-download"></i>
+                                    <i style="cursor: hand; margin-right: 5px;" onclick="deleteClient('{{server.NAME}}', '{{client}}');" title="Delete client" class="fas fa-trash"></i>
+                                </th>
                             </tr>
                         {% endfor %}
                     </tbody>

@@ -108,3 +108,16 @@ def start(request, SERVER_NAME):
     p = subprocess.Popen(new_server_script, env=env)
     p.communicate()
     return redirect("servers")
+
+@login_required
+def delete_client(request, SERVER_NAME, CLIENT_NAME):
+    if request.method == "GET":
+        print("Deleting client '%s'" % SERVER_NAME)
+        delete_client_script = "%s/helpers/delete_client.sh" % os.path.dirname(os.path.realpath(__file__))
+        env = request.POST.copy()
+        env['SERVER_NAME'] = SERVER_NAME
+        env['CLIENT_NAME'] = CLIENT_NAME
+        p = subprocess.Popen(delete_client_script, env=env)
+        p.communicate()
+        return redirect("view_server", env['SERVER_NAME'])
+        
