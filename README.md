@@ -60,6 +60,12 @@ If migrations fail, run the commands `./manage.py makemigrations` and `./manage.
 
 ## Start of the application
 The application can be run using the included `run.sh` script or by issuing the command `./manage.py runserver <listenip>:<port>`.
+  
+Now open a webbrowser and navigate to the address of the server on port 8080 (by default). The default login is as follows
+```
+Username: root
+Password: password123
+```
 
 # Goals
 The goal of this application is to ease the use and setup of OpenVPN and hopefully other VPN services later on.
