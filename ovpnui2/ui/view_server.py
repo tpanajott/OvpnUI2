@@ -13,10 +13,8 @@ import subprocess
 import sys
 import os
 
-from ui.models import Settings
 
 from . import utils
-from . import settings
 from . import enums
 from . import backend
 
@@ -92,7 +90,7 @@ def delete(request, SERVER_NAME):
 
 @login_required
 def stop(request, SERVER_NAME):
-    print("Deleting server '%s'" % SERVER_NAME)
+    print("Stopping server '%s'" % SERVER_NAME)
     new_server_script = "%s/helpers/stop_disable_server.sh" % os.path.dirname(os.path.realpath(__file__))
     env = request.POST.copy()
     env['SERVER_NAME'] = SERVER_NAME
@@ -103,7 +101,7 @@ def stop(request, SERVER_NAME):
 
 @login_required
 def start(request, SERVER_NAME):
-    print("Deleting server '%s'" % SERVER_NAME)
+    print("Starting server '%s'" % SERVER_NAME)
     new_server_script = "%s/helpers/start_enable_server.sh" % os.path.dirname(os.path.realpath(__file__))
     env = request.POST.copy()
     env['SERVER_NAME'] = SERVER_NAME

@@ -9,8 +9,3 @@ class Server(models.Model):
     listen_port = models.IntegerField(default=1194)
     path = models.CharField(max_length=200, default='-')
     service_name = models.CharField(max_length=200, default='-')
-
-class Settings(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=200, default='')
-    value = models.CharField(max_length=5000, default='')
