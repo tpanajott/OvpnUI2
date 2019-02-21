@@ -1,10 +1,12 @@
 - [How to setup](#how-to-setup)
   - [Prerequisites](#prerequisites)
   - [Download and setup](#download-and-setup)
-    - [Locking down allowed hosts](#locking-down-allowed-hosts)
+    - [Limiting allowed hosts](#limiting-allowed-hosts)
     - [Installing base software](#installing-base-software)
     - [Helpers permissions](#helpers-permissions)
     - [Install python modules](#install-python-modules)
+  - [Load inital data](#load-inital-data)
+  - [Start of the application](#start-of-the-application)
 - [Goals](#goals)
 
 # How to setup
@@ -21,7 +23,7 @@ git pull https://github.com/vpklotar/OvpnUI2.git ~/OvpnUI2
 ```
 The application currently requiers it to be run as root user in order to manage systemctl services.
 
-### Locking down allowed hosts
+### Limiting allowed hosts
 This application comes predefined to allow any host to connect. If you want to specify this more strictly the settings.json file is located in the `ovpnui2/ovpnui2/` directory. Look for the `ALLOWED_HOSTS` setting around line 28. To se configuration examples please look at Djangos offical website https://docs.djangoproject.com/en/2.1/ref/settings/#allowed-hosts
 
 ### Installing base software
@@ -44,6 +46,20 @@ To become root, run `su` or `sudo su`. Then start the application be running the
 cd ~/OvpnUI2/ovpnui2/
 ./manage.py
 ```
+
+## Load inital data
+To load the inital login data run the following commands
+```
+# This will flush the existing database of users
+./manage.py flush
+# The will load the default fixture (set) of users
+./manage.py loaddata fixtures/users.json
+```
+
+If migrations fail, run the commands `./manage.py makemigrations` and `./manage.py migrate` to setup the database.
+
+## Start of the application
+The application can be run using the included `run.sh` script or by issuing the command `./manage.py runserver <listenip>:<port>`.
 
 # Goals
 The goal of this application is to ease the use and setup of OpenVPN and hopefully other VPN services later on.
